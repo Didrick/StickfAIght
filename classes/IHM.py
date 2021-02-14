@@ -11,12 +11,16 @@ white = (255,255,255)
 black = (0,0,0)
 pink = (255,200,200)
 
+screen_wdth = 640
+screen_height = 480
+
 class Pygame():
     def __init__(self):
         pygame.init()
         self.clock = pygame.time.Clock()
-        self.fenetre = pygame.display.set_mode((640, 480))
+        self.fenetre = pygame.display.set_mode((screen_wdth, screen_height))
         self.background = pygame.Surface(self.fenetre.get_size())
+        self.floor = pygame.image.load('images/dirt.png')
         
         #setup entity
         self.enemies = []
@@ -39,9 +43,11 @@ class Pygame():
     def graphical(self):
         self.background.fill((0, 200, 255))
         self.fenetre.blit(self.background, (0, 0))
+        self.fenetre.blit(self.floor, (screen_height,0))
 
         for pl in self.players:
-            player = pygame.draw.rect(self.fenetre, red, pl.hitbox)
+            #player = pygame.draw.rect(self.fenetre, red, pl.hitbox)
+            player = self.fenetre.blit(pl.image, pl.rect)
 
     def work(self):
         for pl in self.players:
