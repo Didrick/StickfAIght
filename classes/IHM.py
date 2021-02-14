@@ -11,22 +11,27 @@ white = (255,255,255)
 black = (0,0,0)
 pink = (255,200,200)
 
-screen_wdth = 640
+screen_width = 640
 screen_height = 480
 
 class Pygame():
     def __init__(self):
         pygame.init()
         self.clock = pygame.time.Clock()
-        self.fenetre = pygame.display.set_mode((screen_wdth, screen_height))
+        self.fenetre = pygame.display.set_mode((screen_width, screen_height))
         self.background = pygame.Surface(self.fenetre.get_size())
         self.floor = pygame.image.load('images/dirt.png')
         
         #setup entity
         self.enemies = []
         self.players = []
-        self.players.append( Entity.Entity(320,240) )
+        self.players.append( Entity.Entity(100,280,'images/red.png' ))
+        self.enemies.append( Entity.Entity(340,280, 'images/Pedobear.png'))
+        
+        self.environment = []
+        
         pass
+
 
     def start(self):
         self.loop = True
@@ -40,18 +45,31 @@ class Pygame():
             if event.type == pygame.QUIT:
                 self.stop()
 
+    
+
     def graphical(self):
         self.background.fill((0, 200, 255))
         self.fenetre.blit(self.background, (0, 0))
-        self.fenetre.blit(self.floor, (screen_height,0))
+        for i in range(0, screen_width//16) : 
+            self.fenetre.blit(self.floor, (i*16,screen_height-100))
+            self.environment.append(pygame.Rect.Rect((i*16,screen_height-100), self.floor.get_width(), self.floor.get_height())
 
         for pl in self.players:
             #player = pygame.draw.rect(self.fenetre, red, pl.hitbox)
-            player = self.fenetre.blit(pl.image, pl.rect)
-
+            player = self.fenetre.blit(pl.image, pl.hitbox)
+        for en in self.enemies:
+            #player = pygame.draw.rect(self.fenetre, red, pl.hitbox)
+            enemie = self.fenetre.blit(en.image, en.hitbox)
     def work(self):
+
         for pl in self.players:
-            pl.move()
+
+            enemie = self.enemies[0]
+            collidlist = [enemie.hitbox]
+            pl.move(collidlist)
+
+            
+            
         pass
 
     def run(self):
