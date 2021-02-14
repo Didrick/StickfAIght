@@ -28,9 +28,9 @@ class IHM():
             self.eventHandler()
 
             #graphical
-            background.fill((0, 200, 255))
-            fenetre.blit(background, (0, 0))
+            self.background.fill((0, 200, 255))
+            self.fenetre.blit(background, (0, 0))
 
             #end
             pygame.display.flip()
-            clock.tick(10)
+            self.clock.tick(10)
