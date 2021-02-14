@@ -2,17 +2,7 @@
 
 import pygame
 from classes import Entity
-
-red = (255,0,0)
-green = (0,255,0)
-blue = (0,0,255)
-darkBlue = (0,0,128)
-white = (255,255,255)
-black = (0,0,0)
-pink = (255,200,200)
-
-screen_width = 640
-screen_height = 480
+from Const import *
 
 class Pygame():
     def __init__(self):
@@ -25,13 +15,12 @@ class Pygame():
         #setup entity
         self.enemies = []
         self.players = []
-        self.players.append( Entity.Entity(100,280,'images/red.png' ))
-        self.enemies.append( Entity.Entity(340,280, 'images/Pedobear.png'))
-        
-        self.environment = []
+        self.environement = []
+        self.players.append( Entity.Entity(128,256,'images/red.png' ))
+        self.enemies.append( Entity.Entity(256,256+32, 'images/Pedobear.png'))
+
         
         pass
-
 
     def start(self):
         self.loop = True
@@ -45,14 +34,11 @@ class Pygame():
             if event.type == pygame.QUIT:
                 self.stop()
 
-    
-
     def graphical(self):
         self.background.fill((0, 200, 255))
         self.fenetre.blit(self.background, (0, 0))
-        for i in range(0, screen_width//16) : 
-            self.fenetre.blit(self.floor, (i*16,screen_height-100))
-            self.environment.append(pygame.Rect.Rect((i*16,screen_height-100), self.floor.get_width(), self.floor.get_height())
+        for env in self.environement:
+            environ = self.fenetre.blit(env.image, env.hitbox)
 
         for pl in self.players:
             #player = pygame.draw.rect(self.fenetre, red, pl.hitbox)
@@ -60,16 +46,22 @@ class Pygame():
         for en in self.enemies:
             #player = pygame.draw.rect(self.fenetre, red, pl.hitbox)
             enemie = self.fenetre.blit(en.image, en.hitbox)
+
+
     def work(self):
 
-        for pl in self.players:
 
+
+        for i in range(0, screen_width//16) : 
+            self.environement.append(Entity.Entity(i*16, screen_height-124, 'images/dirt.png', 32, 32))
+
+        for pl in self.players:
             enemie = self.enemies[0]
             collidlist = [enemie.hitbox]
+            for env in self.environement:
+                collidlist.append(env.hitbox)
             pl.move(collidlist)
-
-            
-            
+        
         pass
 
     def run(self):
@@ -85,4 +77,4 @@ class Pygame():
 
             #end
             pygame.display.flip()
-            self.clock.tick(10)
+            self.clock.tick(20)
