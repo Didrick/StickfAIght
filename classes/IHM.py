@@ -21,16 +21,21 @@ class Pygame():
     def eventHandler(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.loop = False
+                self.stop()
+
+    def graphical(self):
+        self.background.fill((0, 200, 255))
+        self.fenetre.blit(self.background, (0, 0))
 
     def run(self):
         while self.loop:
             #event
             self.eventHandler()
 
+            #work
+
             #graphical
-            self.background.fill((0, 200, 255))
-            self.fenetre.blit(self.background, (0, 0))
+            self.graphical()
 
             #end
             pygame.display.flip()
