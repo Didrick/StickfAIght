@@ -2,4 +2,5 @@
 
 from classes import IHM
 
-IHM = IHM.IHM()
+ihm = IHM.Pygame()
+ihm.start()

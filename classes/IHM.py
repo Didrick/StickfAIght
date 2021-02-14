@@ -3,16 +3,17 @@
 import pygame
 
 
-class IHM():
+class Pygame():
     def __init__(self):
         pygame.init()
         self.clock = pygame.time.Clock()
         self.fenetre = pygame.display.set_mode((640, 480))
-        self.background = pygame.Surface(fenetre.get_size())
+        self.background = pygame.Surface(self.fenetre.get_size())
         pass
 
     def start(self):
         self.loop = True
+        self.run()
     
     def stop(self):
         self.loop = False
@@ -29,7 +30,7 @@ class IHM():
 
             #graphical
             self.background.fill((0, 200, 255))
-            self.fenetre.blit(background, (0, 0))
+            self.fenetre.blit(self.background, (0, 0))
 
             #end
             pygame.display.flip()
