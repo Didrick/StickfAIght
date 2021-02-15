@@ -17,7 +17,7 @@ class Pygame():
         self.players = []
         self.environement = []
         self.players.append( Entity.Entity(128,256,'images/red.png' ))
-        self.enemies.append( Entity.Entity(256,256+32, 'images/Pedobear.png'))
+        self.enemies.append( Entity.Entity(256,256+16, 'images/Pedobear.png'))
 
         
         pass
@@ -77,4 +77,4 @@ class Pygame():
 
             #end
             pygame.display.flip()
-            self.clock.tick(20)
+            self.clock.tick(80)

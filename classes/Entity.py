@@ -14,19 +14,18 @@ class Entity():
         self.hitbox.x = x
         self.hitbox.y = y
         self.velo_y = 0
+        self.velo_delta = 0
         pass
 
     def move(self,collidlist):
         
         hitbox_back = copy(self.hitbox)
-        self.hitbox.y += 16
+        self.hitbox.y += 4 + self.velo_delta
         falling = True
         if(self.hitbox.collidelist(collidlist) != -1): 
             falling = False
-            self.hitbox.y -= 16
+            self.hitbox.y -= 4 + self.velo_delta
         
-        print (self.velo_y)
-
         if self.velo_y < 0:
             falling = False
         
@@ -34,31 +33,33 @@ class Entity():
         
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
-            self.hitbox.x -= 8 * self.vitesse
+            self.hitbox.x -= 4 * self.vitesse
             if self.hitbox.x < 0:
                 self.hitbox.x = 0 * self.vitesse
         if key[pygame.K_RIGHT]:
-            self.hitbox.x += 8 * self.vitesse
+            self.hitbox.x += 4 * self.vitesse
             if self.hitbox.x > screen_width - self.hitbox.width : 
-             self.hitbox.x -= 8  * self.vitesse
+             self.hitbox.x -= 4  * self.vitesse
 
 
         if key[pygame.K_UP] and not falling and self.velo_y == 0:
-            self.velo_y -= 80
+            self.velo_y -= 40
+            self.velo_delta = 0
 
         if self.velo_y < 0:
-            self.hitbox.y = self.hitbox.y + self.velo_y + 16
-            self.velo_y += 16
+            self.hitbox.y = self.hitbox.y + self.velo_y + 4
+            self.velo_y += (4 + self.velo_delta)
+            self.velo_delta += 1
         if self.velo_y > 0:
-            self.hitbox.y = self.hitbox.y + self.velo_y - 16
-            self.velo_y -= 16
+            self.hitbox.y = self.hitbox.y + self.velo_y - 4
+            self.velo_y -= (4 + self.velo_delta)
+            self.velo_delta -=1
             
             if self.hitbox.y < 0: # a auto
                 self.hitbox.y = 0
         
         if(self.hitbox.collidelist(collidlist) != -1): 
-            self.hitbox = hitbox_back
-            print (self.velo_y)
+            self.hitbox = hitbox_back=
         
     
         #y = y-taille de case * vitesse
