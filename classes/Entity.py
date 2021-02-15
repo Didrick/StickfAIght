@@ -59,7 +59,7 @@ class Entity():
                 self.hitbox.y = 0
         
         if(self.hitbox.collidelist(collidlist) != -1): 
-            self.hitbox = hitbox_back=
+            self.hitbox = hitbox_back
         
     
         #y = y-taille de case * vitesse
