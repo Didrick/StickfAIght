@@ -5,7 +5,9 @@ import select
 import random
 import time
 
-#ligne de didrick
+
+#on m appelle l'ovni
+
 class GameClient(object):
     def __init__(self, addr="85.168.112.123", serverport=40000):
         self.clientport = random.randrange(8000, 8999)
