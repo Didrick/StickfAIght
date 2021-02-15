@@ -1,12 +1,16 @@
+
+import socket
+import select
+import sys
+
 class GameServer(object):
-  def __init__(self, port=9009, max_num_players=5):
+  def __init__(self, port=40000, max_num_players=10):
     self.listener = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    # Bind to localhost - set to external ip to connect from other computers
-    self.listener.bind(("127.0.0.1", port))
+    self.listener.bind(("192.168.0.17", port))
     self.read_list = [self.listener]
     self.write_list = []
     
-    self.stepsize = 5
+    self.stepsize = 8
     self.players = {}
     
   def do_movement(self, mv, player):
@@ -23,35 +27,35 @@ class GameServer(object):
     self.players[player] = pos
     
   def run(self):
-    print "Waiting..."
     try:
-      while True:
-        readable, writable, exceptional = (
-          select.select(self.read_list, self.write_list, [])
-        )
-        for f in readable:
-          if f is self.listener:
-            msg, addr = f.recvfrom(32)
-            if len(msg) >= 1:
-              cmd = msg[0]
-              if cmd == "c":  # New Connection
-                self.players[addr] = (0,0)
-              elif cmd == "u":  # Movement Update
-                if len(msg) >= 2 and addr in self.players:
-                  # Second char of message is direction (udlr)
-                  self.do_movement(msg[1], addr)
-              elif cmd == "d":  # Player Quitting
-                if addr in self.players:
-                  del self.players[addr]
-              else:
-                print "Unexpected: {0}".format(msg)
-        for player in self.players:
-          send = []
-          for pos in self.players:
-            send.append("{0},{1}".format(*self.players[pos]))
-          self.listener.sendto('|'.join(send), player)
+        #if(self.hitbox.collidelist(collidlist) != -1):
+        while True:
+            readable, writable, exceptional = (
+                select.select(self.read_list, self.write_list, [])
+            )
+            for f in readable:
+                if f is self.listener:
+                    msg, addr = f.recvfrom(32)
+                    msg = msg.decode()
+                    if len(msg) >= 1:
+                        cmd = msg[0]
+                    if cmd == "c":  # New Connection
+                        self.players[addr] = (0,0)
+                    elif cmd == "u":  # Movement
+                        if len(msg) >= 2 and addr in self.players:
+                            self.do_movement(msg[1], addr)
+                    elif cmd == "d":  # Quit
+                        if addr in self.players:
+                            del self.players[addr]
+                        else:
+                            print ("Unexpected: {0}".format(msg))
+            for player in self.players:
+                send = []
+                for pos in self.players:
+                    send.append("{0},{1}".format(*self.players[pos]))
+                self.listener.sendto('|'.join(send).encode(), player)
     except KeyboardInterrupt as e:
-      pass
+        pass
 
 if __name__ == "__main__":
   g = GameServer()
